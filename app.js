@@ -9,4 +9,6 @@ app.get('/', function(req, res) {
   res.render('home-guest')
 })
 
-app.listen(3000)
+app.listen(3000, () => {
+  console.log(`Check in http://localhost:3000/`)
+})
