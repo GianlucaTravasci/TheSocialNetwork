@@ -77,9 +77,9 @@ User.prototype.login = function() {
         usersCollection.findOne({username})
             .then((attemptedUser) => {
                 if (attemptedUser && bcrypt.compareSync(password, attemptedUser.password)){
-                    resolve("Congrats!");
+                    resolve("Logged In");
                 } else {
-                    reject("Invalid username / password");
+                    reject("Invalid Credential");
                 }
             })
             .catch(err => {

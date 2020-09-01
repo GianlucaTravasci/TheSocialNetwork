@@ -7,15 +7,19 @@ exports.login = (req, res) => {
             req.session.user = {
                 username: user.data.username
             }
-            res.send(response)
+            req.session.save(() => {
+                res.redirect('/')
+            })
         })
         .catch(err => {
             res.send(err)
         })
 }
 
-exports.logout = () => {
-    
+exports.logout = (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
 }
 
 exports.register = (req, res) => {
