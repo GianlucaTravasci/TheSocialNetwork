@@ -12,9 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "connect-mongo": "^3.2.0",
     "dotenv": "^8.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "express-session": "^1.17.1",
     "mongodb": "^3.6.0",
     "nodemon": "^1.19.0",
     "validator": "^13.1.1"

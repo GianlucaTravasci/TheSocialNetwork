@@ -2,8 +2,11 @@ const User = require('../models/User');
 
 exports.login = (req, res) => {
     let user = new User(req.body);
-    user.login()
+    user.login()                    //Return a promise
         .then(response => {
+            req.session.user = {
+                username: user.data.username
+            }
             res.send(response)
         })
         .catch(err => {
@@ -21,10 +24,17 @@ exports.register = (req, res) => {
     if (user.errors.length) {
         res.send.errors;
     } else {
-        res.send("register success!")
+        req.session.user = {
+            username: user.data.username
+        }
+        res.render('home-dashboard', {username: req.session.user.username})
     }
 }
 
 exports.home = (req, res) => {
-    res.render('home-guest')
+    if (req.session.user) {
+        res.render('home-dashboard', {username: req.session.user.username})
+    } else {
+        res.render('home-guest')
+    }
 }
