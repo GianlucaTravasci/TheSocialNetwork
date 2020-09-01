@@ -3,16 +3,14 @@
  * routes of the project in order to keep the main server file
  * as clean as possible
 */
-
 const express = require("express");
 const router = express.Router();
+const userController = require('./controllers/userController')
 
-router.get('/', (req, res) =>{
-    res.render('home-guest');
-})
+router.get('/', userController.home)
 
-router.get('/sample', (req, res) => {
-    res.send('Welcome to the about page!')
-})
+router.post('/register', userController.register)
+
+router.post('/login', userController.login)
 
 module.exports = router;

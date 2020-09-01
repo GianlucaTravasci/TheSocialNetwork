@@ -8,7 +8,8 @@ app.set('view engine', 'ejs')
 
 //PAGES OF THE APPLICATION
 app.use('/', router);
-app.use('/sample', router)
+app.use('/register', router);
+app.use('/login', router);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Check in http://localhost:3000/`)
