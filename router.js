@@ -1,0 +1,16 @@
+/**
+ * The only responsability of this file is to list the
+ * routes of the project in order to keep the main server file
+ * as clean as possible
+*/
+const express = require("express");
+const router = express.Router();
+const userController = require('./controllers/userController')
+
+router.get('/', userController.home)
+
+router.post('/register', userController.register)
+
+router.post('/login', userController.login)
+
+module.exports = router;

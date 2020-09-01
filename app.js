@@ -1,12 +1,18 @@
 const express = require('express')
-const app = express()
+const router = require('./router');
+const app = express();
 
-app.use(express.static('public'))
-app.set('views', 'views')
-app.set('view engine', 'ejs')
+app.use(express.static('public'));
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+app.set('views', 'views');
+app.set('view engine', 'ejs');
 
-app.get('/', function(req, res) {
-  res.render('home-guest')
+//PAGES OF THE APPLICATION
+app.use('/', router);
+app.use('/register', router);
+app.use('/login', router);
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Check in http://localhost:3000/`)
 })
-
-app.listen(3000)

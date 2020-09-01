@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "watch": "nodemon app",
+    "start": "nodemon app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,6 +13,7 @@
   "dependencies": {
     "ejs": "^2.6.1",
     "express": "^4.16.4",
-    "nodemon": "^1.19.0"
+    "nodemon": "^1.19.0",
+    "validator": "^13.1.1"
   }
 }
