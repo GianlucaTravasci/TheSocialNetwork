@@ -31,8 +31,12 @@ exports.register = (req, res) => {
         req.session.user = {
             username: user.data.username
         }
-        res.render('home-dashboard', {username: req.session.user.username})
+        res.redirect('/')
     }
+}
+
+exports.createPost = (req, res) => {
+
 }
 
 exports.home = (req, res) => {
