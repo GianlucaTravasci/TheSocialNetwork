@@ -1,4 +1,5 @@
 const validator = require('validator');
+let usersCollection = require('../db').collection('users');
 
 let User = function(data) {
     this.data = data;
@@ -7,7 +8,7 @@ let User = function(data) {
 
 //SECURITY FUNCTION TO LET USER ENTER IN DATABASE ONLY STRINGS
 User.prototype.cleanUp = function() {
-    const { username, email, password } = this.data;
+    let { username, email, password } = this.data;
     if (typeof(username) != "string") {
         username = '';
     }
@@ -26,6 +27,7 @@ User.prototype.cleanUp = function() {
     }
 }
 
+//VALIDATION IN THE REGISTRATION PHASE
 User.prototype.validate = function() {
     const { username, email, password } = this.data;
     if (username == '') {
@@ -59,11 +61,28 @@ User.prototype.register = function() {
     this.cleanUp();
     this.validate();
     //TODO: if no error save data on database
-    if(this.errors.length == 0) {
-        console.log("all good")
-    } else {
-        console.log(this.errors);
+    if(!this.errors.length) {
+        usersCollection.insertOne(this.data)
     }
 }
 
-module.exports = User
+User.prototype.login = function() {
+    return new Promise((resolve, reject) => {
+        this.cleanUp();
+        const { username, password} = this.data;
+        usersCollection.findOne({username})
+            .then((attemptedUser) => {
+                if (attemptedUser && attemptedUser.password == password){
+                    resolve("Congrats!");
+                } else {
+                    reject("Invalid username / password");
+                }
+            })
+            .catch(err => {
+                reject("Please try again later.");
+            })
+    })
+}
+
+
+module.exports = User;

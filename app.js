@@ -13,6 +13,4 @@ app.use('/', router);
 app.use('/register', router);
 app.use('/login', router);
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Check in http://localhost:3000/`)
-})
+module.exports = app;

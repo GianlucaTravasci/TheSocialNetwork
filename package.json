@@ -4,15 +4,17 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app",
+    "start": "nodemon db",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "mongodb": "^3.6.0",
     "nodemon": "^1.19.0",
     "validator": "^13.1.1"
   }
