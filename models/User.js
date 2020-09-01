@@ -4,6 +4,28 @@ let User = function(data) {
     this.data = data;
     this.errors = [];
 }
+
+//SECURITY FUNCTION TO LET USER ENTER IN DATABASE ONLY STRINGS
+User.prototype.cleanUp = function() {
+    const { username, email, password } = this.data;
+    if (typeof(username) != "string") {
+        username = '';
+    }
+    if (typeof(email) != "string") {
+        email = '';
+    }
+    if (typeof(password) != "string") {
+        password = '';
+    }
+
+    //Get rid of any bogus properties
+    this.data = {
+        username: username.trim().toLowerCase(),
+        email: email.trim().toLowerCase(),
+        password
+    }
+}
+
 User.prototype.validate = function() {
     const { username, email, password } = this.data;
     if (username == '') {
@@ -34,6 +56,7 @@ User.prototype.validate = function() {
 
 User.prototype.register = function() {
     //Validate user data
+    this.cleanUp();
     this.validate();
     //TODO: if no error save data on database
     if(this.errors.length == 0) {

@@ -11,7 +11,7 @@ exports.logout = () => {
 
 exports.register = (req, res) => {
     let user = new User(req.body);
-    user.register()
+    user.register();
 }
 
 exports.home = (req, res) => {
