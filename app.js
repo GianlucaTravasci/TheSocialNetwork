@@ -1,10 +1,12 @@
 const express = require('express')
 const router = require('./router');
-const app = express()
+const app = express();
 
-app.use(express.static('public'))
-app.set('views', 'views')
-app.set('view engine', 'ejs')
+app.use(express.static('public'));
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+app.set('views', 'views');
+app.set('view engine', 'ejs');
 
 //PAGES OF THE APPLICATION
 app.use('/', router);
