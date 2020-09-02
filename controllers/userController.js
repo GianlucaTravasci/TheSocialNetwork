@@ -35,10 +35,6 @@ exports.register = (req, res) => {
     }
 }
 
-exports.createPost = (req, res) => {
-
-}
-
 exports.home = (req, res) => {
     if (req.session.user) {
         res.render('home-dashboard', {username: req.session.user.username})
