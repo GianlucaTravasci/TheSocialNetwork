@@ -23,8 +23,5 @@ app.set('view engine', 'ejs');
 
 //PAGES OF THE APPLICATION
 app.use('/', router);
-app.use('/register', router);
-app.use('/login', router);
-app.use('/logout', router);
 
 module.exports = app;
