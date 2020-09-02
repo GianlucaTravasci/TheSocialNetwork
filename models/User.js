@@ -1,6 +1,6 @@
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { promiseImpl } = require('ejs');
+const md5 = require('md5');
 let usersCollection = require('../db').db().collection('users');
 
 let User = function(data) {
@@ -73,7 +73,6 @@ User.prototype.validate = function() {
                 this.errors.push("That email is already been used.")
             }
         }
-
         resolve()
     })
 }
@@ -89,6 +88,7 @@ User.prototype.register = function() {
             let salt = bcrypt.genSaltSync(10);
             this.data.password = bcrypt.hashSync(this.data.password, salt);
             await usersCollection.insertOne(this.data);
+            this.getAvatar();
             resolve();
         } else {
             reject(this.errors)
@@ -103,6 +103,8 @@ User.prototype.login = function() {
         usersCollection.findOne({username})
             .then((attemptedUser) => {
                 if (attemptedUser && bcrypt.compareSync(password, attemptedUser.password)){
+                    this.data=attemptedUser;
+                    this.getAvatar()
                     resolve("Logged In");
                 } else {
                     reject("Invalid Credential");
@@ -112,6 +114,10 @@ User.prototype.login = function() {
                 reject("Please try again later.");
             })
     })
+}
+
+User.prototype.getAvatar = function() {
+    this.avatar = `https://www.gravatar.com/avatar/${md5(this.data.email)}?s=128`
 }
 
 
