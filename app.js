@@ -10,7 +10,7 @@ let sessionOption = session({
     resave: false,
     saveUninitialized: false,
     cookie: {maxAge: 1000 * 60 * 60 * 24, httpOnly: true} //here im setting a session that is actually stay up for an entire day
-})
+});
 
 app.use(sessionOption);
 app.use(express.static('public'));
@@ -23,6 +23,6 @@ app.set('view engine', 'ejs');
 app.use('/', router);
 app.use('/register', router);
 app.use('/login', router);
-app.use('/logout', router)
+app.use('/logout', router);
 
 module.exports = app;
