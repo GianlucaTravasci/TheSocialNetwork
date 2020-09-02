@@ -29,12 +29,19 @@ exports.register = (req, res) => {
     let user = new User(req.body);
     user.register();
     if (user.errors.length) {
-        res.send.errors;
+        user.errors.forEach((error) => {
+            req.flash('regErrors', error);
+        })
+        req.session.save(() => {
+            res.redirect('/')
+        })
     } else {
         req.session.user = {
             username: user.data.username
         }
-        res.redirect('/')
+        req.session.save(() => {
+            res.redirect('/')
+        })
     }
 }
 
@@ -42,6 +49,6 @@ exports.home = (req, res) => {
     if (req.session.user) {
         res.render('home-dashboard', {username: req.session.user.username})
     } else {
-        res.render('home-guest', {errors: req.flash('errors')})
+        res.render('home-guest', {errors: req.flash('errors'), regErrors: req.flash('regErrors')})
     }
 }
