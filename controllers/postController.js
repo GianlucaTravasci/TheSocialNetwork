@@ -5,5 +5,5 @@ exports.addPost = (req, res) => {
 }
 
 exports.viewPostScreen = (req, res) => {
-    res.render('create-post', {avatar: req.session.user.avatar});
+    res.render('create-post', {username: req.session.user.username, avatar: req.session.user.avatar});
 }
