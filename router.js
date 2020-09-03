@@ -20,6 +20,8 @@ router.post('/logout', userController.logout);
 
 //Post controller route
 
-router.get('/create-post', postController.viewPostScreen)
+router.get('/create-post', postController.viewPostScreen);
+
+router.post('/create-post', postController.addPost);
 
 module.exports = router;
