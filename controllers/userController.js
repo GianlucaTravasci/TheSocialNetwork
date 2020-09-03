@@ -17,7 +17,8 @@ exports.login = (req, res) => {
         .then(response => {
             req.session.user = {
                 avatar: user.avatar,
-                username: user.data.username
+                username: user.data.username,
+                _id: user.data._id
             }
             req.session.save(() => {
                 res.redirect('/')
@@ -43,7 +44,8 @@ exports.register = (req, res) => {
         .then(() => {
             req.session.user = {
                 avatar: user.avatar,
-                username: user.data.username
+                username: user.data.username,
+                _id: user.data._id
             };
             req.session.save(() => {
                 res.redirect('/');
