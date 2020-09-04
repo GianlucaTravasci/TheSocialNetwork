@@ -13,6 +13,11 @@ exports.addPost = (req, res) => {
     })
 }
 
-exports.viewSingle = (req, res) => {
-    res.render('post')
+exports.viewSingle = async(req, res) => {
+    try {
+        let post = await Post.findSingleById(req.params.id)
+        res.render('post-single', {post})
+    } catch {
+        res.send("404 template here"); //this is for catch some malitius code or somrthing not good
+    }
 }
