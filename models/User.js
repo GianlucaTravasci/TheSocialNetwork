@@ -1,11 +1,18 @@
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const md5 = require('md5');
+const { get } = require('../router');
 let usersCollection = require('../db').db().collection('users');
 
-let User = function(data) {
+let User = function(data, getAvatar) {
     this.data = data;
     this.errors = [];
+    if(getAvatar == undefined) {
+        getAvatar = false;
+    }
+    if(getAvatar) {
+        this.getAvatar();
+    }
 }
 
 //SECURITY FUNCTION TO LET USER ENTER IN DATABASE ONLY STRINGS
