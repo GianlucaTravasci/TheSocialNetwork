@@ -47,14 +47,9 @@ Post.prototype.addPost = function() {
 
 }
 
-Post.findSingleById = function(id) {
+Post.reusablePostQuery = function(uniqueOperation) {
     return new Promise(async(resolve, reject) => {
-        if(typeof(id) != 'string' || !ObjectID.isValid(id)) {
-            reject();
-            return //to stop the function right here and dont go over
-        }
-        let posts = await postCollection.aggregate([
-            {$match: {_id: new ObjectID(id)}},
+        let aggOperations = uniqueOperation.concat([
             {$lookup: {
                 from: 'users', 
                 localField: 'author', 
@@ -69,7 +64,9 @@ Post.findSingleById = function(id) {
                     "$authorOfTheDocument", 0
                 ]}
             }}
-        ]).toArray();
+        ])
+
+        let posts = await postCollection.aggregate(aggOperations).toArray();
 
         //clean up author prop in each post object
         posts = posts.map((post) =>{
@@ -79,14 +76,35 @@ Post.findSingleById = function(id) {
             }
             return post;
         })
+        resolve(posts);
+    })
+}
+
+Post.findSingleById = function(id) {
+    return new Promise(async(resolve, reject) => {
+        if(typeof(id) != 'string' || !ObjectID.isValid(id)) {
+            reject();
+            return //to stop the function right here and dont go over
+        }
+        
+        let posts = await Post.reusablePostQuery([
+            {$match: {_id: new ObjectID(id)}}
+        ])
 
         if (posts.length) {
-            console.log(posts[0])
             resolve(posts[0]);
         } else {
             reject();
         }
     })
+}
+
+
+Post.findByAuthorId = function(author) {
+    return Post.reusablePostQuery([
+        {$match: {author}},
+        {$sort: {data: -1}}
+    ])
 }
 
 module.exports = Post;
