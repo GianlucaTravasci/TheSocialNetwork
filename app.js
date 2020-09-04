@@ -1,5 +1,4 @@
 const express = require('express')
-const router = require('./router');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
@@ -15,9 +14,16 @@ let sessionOption = session({
 
 app.use(flash())
 app.use(sessionOption);
+app.use((req, res, next)=>{
+    res.locals.user = req.session.user
+    next();
+})
+const router = require('./router');
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+
+
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 

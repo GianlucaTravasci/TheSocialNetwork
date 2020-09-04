@@ -1,7 +1,7 @@
 const Post = require('../models/Post');
 
 exports.viewPostScreen = (req, res) => {
-    res.render('create-post', {username: req.session.user.username, avatar: req.session.user.avatar});
+    res.render('create-post');
 }
 
 exports.addPost = (req, res) => {
@@ -11,4 +11,8 @@ exports.addPost = (req, res) => {
     }).catch((err) => {
         res.send(err);
     })
+}
+
+exports.viewSingle = (req, res) => {
+    res.render('post')
 }
