@@ -34,13 +34,15 @@ Post.prototype.addPost = function() {
         this.cleanUp();
         this.validate();
         if(!this.errors.length) {
-            postCollection.insertOne(this.data).then(() => {
-                resolve()
-            })
-            .catch(() => {
-                this.errors.push("Please try again later.")
-                reject(this.errors);
-            })
+            postCollection.insertOne(this.data)
+                .then((info) => {
+                    resolve(info.ops[0]._id)
+                })
+                .catch(() => {
+                    this.errors.push("Please try again later.")
+                     reject(this.errors);
+                }
+            )
         } else {
             reject(this.errors);
         }

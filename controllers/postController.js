@@ -4,12 +4,14 @@ exports.viewPostScreen = (req, res) => {
     res.render('create-post');
 }
 
-exports.addPost = (req, res) => {
+exports.addPost = function(req, res) {
     let post = new Post(req.body, req.session.user._id)
-    post.addPost().then(() => {
-        res.send('post created')
-    }).catch((err) => {
-        res.send(err);
+    post.addPost().then(function(newId) {
+        req.flash("success", "New post succeddfully created.")
+        req.session.save(() => res.redirect(`/post/${newId}`))
+    }).catch(function(errors) {
+        errors.forEach((error) => {req.flash("errors", error)})
+        req.session.save(() => res.redirect("/create-post"))
     })
 }
 
@@ -25,7 +27,14 @@ exports.viewSingle = async(req, res) => {
 exports.viewEditScreen = async(req, res) => {
     try{
         let post = await Post.findSingleById(req.params.id)
-        res.render('edit-post', {post})
+        if (post.authorId == req.visitorId) {
+            res.render('edit-post', {post})
+        } else {
+            req.flash("errors", "You do not have the permission to perform that action.")
+            res.session.save(() => {
+                res.redirect('/')
+            })
+        }
     } catch {
         res.render('404');
     }
