@@ -29,8 +29,10 @@ router.post('/create-post', userController.mustBeLogged, postController.addPost)
 
 router.get('/post/:id', postController.viewSingle);
 
-router.get('/post/:id/edit', postController.viewEditScreen);
+router.get('/post/:id/edit', userController.mustBeLogged, postController.viewEditScreen);
 
-router.post('/post/:id/edit', postController.editPost)
+router.post('/post/:id/edit', userController.mustBeLogged, postController.editPost)
+
+router.post('/post/:id/delete', userController.mustBeLogged, postController.deletePost)
 
 module.exports = router;
