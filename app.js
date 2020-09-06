@@ -15,6 +15,10 @@ let sessionOption = session({
 app.use(flash())
 app.use(sessionOption);
 app.use((req, res, next)=>{
+    //make all flash stuff availables for all pages
+    res.locals.errors = req.flash('errors')
+    res.locals.success = req.flash('success');
+
     //make current user id available on the req object
     if(req.session.user){
         req.visitorId = req.session.user._id
