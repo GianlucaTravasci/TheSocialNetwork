@@ -27,6 +27,8 @@ router.get('/create-post', userController.mustBeLogged, postController.viewPostS
 
 router.post('/create-post', userController.mustBeLogged, postController.addPost);
 
-router.get('/post/:id', userController.mustBeLogged, postController.viewSingle);
+router.get('/post/:id', postController.viewSingle);
+
+router.get('/post/:id/edit', postController.viewEditScreen);
 
 module.exports = router;
