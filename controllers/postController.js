@@ -15,7 +15,7 @@ exports.addPost = (req, res) => {
 
 exports.viewSingle = async(req, res) => {
     try {
-        let post = await Post.findSingleById(req.params.id)
+        let post = await Post.findSingleById(req.params.id, req.visitorId)
         res.render('post-single', {post})
     } catch {
         res.render('404'); 
