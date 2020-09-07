@@ -1,22 +1,55 @@
+import axios from 'axios';
+
 export default class Search {
     constructor() {
         this.injectHTML();
         this.headerSerchIcon = document.querySelector('.header-search-icon') 
         this.overlay = document.querySelector('.search-overlay')
         this.closeIcon = document.querySelector('.close-live-search')
+        this.inputField = document.querySelector('#live-search-field')
+        this.resultArea = document.querySelector('.live-search-results')
+        this.loaderIcon = document.querySelector('.circle-loader')
+        this.typingWaitTimer
+        this.preaviousValue = ''
         this.events();
     }
 
     events() {
+        this.inputField.addEventListener('keyup', () => this.keyPressHandler())
         this.closeIcon.addEventListener('click', ()=> this.closeOverlay())
         this.headerSerchIcon.addEventListener('click', (event) => {
             event.preventDefault();
             this.openOverlay()
         })
     }
+    //with this instead of send a server req every key pressed it send req after 2 second of non-typing from user.
+    keyPressHandler() {
+        let value = this.inputField.value;
+
+        if(value!=''||value!=this.preaviousValue) {
+            clearTimeout(this.typingWaitTimer)
+            this.showLoaderIcon();
+            this.typingWaitTimer =setTimeout(()=>this.sendRequest(), 2000)
+        }
+
+        this.preaviousValue = value;
+    }
+
+    sendRequest() {
+        axios.post('/search', {SearchTerm: this.inputField.value}).then(()=>{
+
+        }).catch(()=>{
+            alert('req failed')
+        })
+    }
+
+    showLoaderIcon() {
+        this.loaderIcon.classList.add('.circle-loader--visible')
+    }
 
     openOverlay() {
-        this.overlay.classList.add('search-overlay--visible')
+        this.overlay.classList.add('search-overlay--visible');
+        setTimeout(()=> this.inputField.focus(), 50)
     }
 
     closeOverlay() {
@@ -34,9 +67,9 @@ export default class Search {
         </div>
     
         <div class="search-overlay-bottom">
-          <div class="container container--narrow py-3">
+          <div clas[s="container container--narrow py-3">
             <div class="circle-loader"></div>
-            <div class="live-search-results live-search-results--visible">
+            <div class="live-search-results">
               <div class="list-group shadow-sm">
                 <div class="list-group-item active"><strong>Search Results</strong> (4 items found)</div>
     
