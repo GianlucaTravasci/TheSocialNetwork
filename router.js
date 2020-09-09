@@ -35,4 +35,6 @@ router.post('/post/:id/edit', userController.mustBeLogged, postController.editPo
 
 router.post('/post/:id/delete', userController.mustBeLogged, postController.deletePost)
 
+router.post('/search', postController.search)
+
 module.exports = router;
