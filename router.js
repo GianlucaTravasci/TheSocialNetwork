@@ -20,7 +20,7 @@ router.post('/login', userController.login);
 router.post('/logout', userController.logout);
 
 //profile controller rout
-router.get('/profile/:username', userController.ifUserExists, userController.profilePostsScreen)
+router.get('/profile/:username', userController.ifUserExists, userController.sharedProfileData, userController.profilePostsScreen)
 
 //Post controller route
 

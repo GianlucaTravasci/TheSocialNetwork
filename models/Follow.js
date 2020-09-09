@@ -1,5 +1,4 @@
-const { ObjectID } = require('mongodb');
-
+const ObjectID = require('mongodb').ObjectID;
 const userCollection = require('../db').db().collection('users');
 const followCollection = require('../db').db().collection('follows');
 
@@ -36,9 +35,19 @@ Follow.prototype.create = function() {
             })
             resolve()
         } else {
-            rejecet()
+            rejecet(this.errors)
         }
     })
+}
+
+Follow.isVisitorFollowing = async function(followedId, visitorId) {
+    let followDoc = await followCollection.findOne({followedId: followedId, authorId: new ObjectID(visitorId)})
+    console.log(followDoc)
+    if (followDoc) {
+        return true
+    } else {
+        return false
+    }
 }
 
 module.exports = Follow;
