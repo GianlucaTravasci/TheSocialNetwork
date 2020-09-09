@@ -7,6 +7,7 @@ const express = require("express");
 const router = express.Router();
 const userController = require('./controllers/userController');
 const postController = require('./controllers/postController');
+const followController = require('./controllers/followController');
 
 //User controllers route
 
@@ -36,5 +37,9 @@ router.post('/post/:id/edit', userController.mustBeLogged, postController.editPo
 router.post('/post/:id/delete', userController.mustBeLogged, postController.deletePost)
 
 router.post('/search', postController.search)
+
+//follow controller route
+
+router.post('/addFollow/:username', userController.mustBeLogged, followController.addFollow)
 
 module.exports = router;
