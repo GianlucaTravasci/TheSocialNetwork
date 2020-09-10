@@ -3,6 +3,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 let sessionOption = session({
     secret: "JS is cool",
@@ -38,7 +40,10 @@ app.use(express.json());
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 
-//PAGES OF THE APPLICATION
 app.use('/', router);
 
-module.exports = app;
+io.on('connection', () => {
+    console.log('CONNECTED!!')
+})
+
+module.exports = server;
