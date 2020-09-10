@@ -29,10 +29,16 @@ Follow.prototype.validate = async function(action) {
             this.errors.push('You are already following this user.')
         }
     }
+
     if(action == 'delete') {
         if(!doesFollowAlreadyExists) {
             this.errors.push('You cannot stop following someone you do not already follow.')
         }
+    }
+
+    //avoid possiblity to follow yourself
+    if(this.followedId.equals(this.authorId)) {
+        this.errors.push('You cannot follow yourself.')
     }
 }
 
