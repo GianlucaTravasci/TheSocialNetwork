@@ -82,14 +82,17 @@ exports.ifUserExists = (req, res, next) => {
         })
 }
 
-exports.sharedProfileData = async (req, res, next) => {
-    let isFollowing = false;
-    if(req.session.user) {
+exports.sharedProfileData = async function(req, res, next) {
+    let isVisitorsProfile = false
+    let isFollowing = false
+    if (req.session.user) {
+        isVisitorsProfile = req.profileUser._id.equals(req.session.user._id)
         isFollowing = await Follow.isVisitorFollowing(req.profileUser._id, req.visitorId)
     }
-    req.isFollowing = isFollowing;
-    console.log(req.isFollowing)
-    next();
+  
+    req.isVisitorsProfile = isVisitorsProfile
+    req.isFollowing = isFollowing
+    next()
 }
 
 exports.profilePostsScreen = (req, res) => {
@@ -100,7 +103,8 @@ exports.profilePostsScreen = (req, res) => {
                 posts: posts,
                 profileUsername: req.profileUser.username,
                 profileAvatar: req.profileUser.avatar,
-                isFollowing: req.isFollowing
+                isFollowing: req.isFollowing,
+                isVisitorsProfile: req.isVisitorsProfile
             })
         }).catch(() => {
             res.render('404')
