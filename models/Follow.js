@@ -124,7 +124,6 @@ Follow.getFollowingById = (id) => {
                 let user = new User(followed, true);
                 return {username: followed.username, avatar: user.avatar}
             });
-            console.log({following})
             resolve(following);
         } catch {
             rejecet();
