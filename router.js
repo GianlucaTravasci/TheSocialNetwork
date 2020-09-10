@@ -24,6 +24,9 @@ router.get('/profile/:username', userController.ifUserExists, userController.sha
 
 router.get('/profile/:username/followers', userController.ifUserExists, userController.sharedProfileData, userController.profileFollowersScreen)
 
+router.get('/profile/:username/following', userController.ifUserExists, userController.sharedProfileData, userController.profileFollowingScreen)
+
+
 
 //Post controller route
 
