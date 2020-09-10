@@ -14,7 +14,7 @@ Follow.prototype.cleanUp = function() {
     } 
 }
 
-Follow.prototype.validate = async function() {
+Follow.prototype.validate = async function(action) {
     //followed user must exist in database
     let followedAccount = await userCollection.findOne({username: this.followedUsername});
     if(followedAccount) {
@@ -22,12 +22,24 @@ Follow.prototype.validate = async function() {
     } else {
         this.errors.push("You cannot follow a user that does not exist.")
     }
+    let doesFollowAlreadyExists = await followCollection.findOne({followedId: this.followedId, authorId: new ObjectID(this.authorId)})
+
+    if(action == 'create') {
+        if(doesFollowAlreadyExists) {
+            this.errors.push('You are already following this user.')
+        }
+    }
+    if(action == 'delete') {
+        if(!doesFollowAlreadyExists) {
+            this.errors.push('You cannot stop following someone you do not already follow.')
+        }
+    }
 }
 
 Follow.prototype.create = function() {
     return new Promise(async(resolve, rejecet) => {
         this.cleanUp();
-        await this.validate();
+        await this.validate('create');
         if(!this.errors.length) {
             await followCollection.insertOne({
                 followedId: this.followedId, 
@@ -40,9 +52,26 @@ Follow.prototype.create = function() {
     })
 }
 
+Follow.prototype.delete = function() {
+    return new Promise(async(resolve, rejecet) => {
+        this.cleanUp();
+        await this.validate('delete');
+        if(!this.errors.length) {
+            await followCollection.deleteOne({
+                followedId: this.followedId, 
+                authorId: new ObjectID(this.authorId)
+            })
+            resolve()
+        } else {
+            rejecet(this.errors)
+        }
+    })
+}
+
+
+
 Follow.isVisitorFollowing = async function(followedId, visitorId) {
     let followDoc = await followCollection.findOne({followedId: followedId, authorId: new ObjectID(visitorId)})
-    console.log(followDoc)
     if (followDoc) {
         return true
     } else {

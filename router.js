@@ -42,4 +42,6 @@ router.post('/search', postController.search)
 
 router.post('/addFollow/:username', userController.mustBeLogged, followController.addFollow)
 
+router.post('/removeFollow/:username', userController.mustBeLogged, followController.removeFollow)
+
 module.exports = router;
