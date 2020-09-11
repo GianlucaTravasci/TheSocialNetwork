@@ -14,6 +14,9 @@ let sessionOption = session({
     cookie: {maxAge: 1000 * 60 * 60 * 24, httpOnly: true} //here im setting a session that is actually stay up for an entire day
 });
 
+io.use((socket, next) => {
+    sessionOption(socket.request, socket.request.res, next)
+})
 app.use(flash())
 app.use(sessionOption);
 app.use((req, res, next)=>{
@@ -43,9 +46,12 @@ app.set('view engine', 'ejs');
 app.use('/', router);
 
 io.on('connection', (socket) => {
-    socket.on('chatMessageFromBrowser', (data) => {
-        io.emit('chatMessageFromServer', {message: data.message})
-    })
+    if(socket.request.session.user) {
+        let user = socket.request.session.user
+        socket.on('chatMessageFromBrowser', (data) => {
+            io.emit('chatMessageFromServer', {message: data.message, username: user.username, avatar: user.avatar})
+        })
+    }
 })
 
 module.exports = server;
