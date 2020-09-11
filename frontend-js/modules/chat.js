@@ -24,7 +24,7 @@ export default class Chat {
     }
 
     showChat() {
-        if(this.openedYet){
+        if(!this.openedYet){
             this.openConnection()
         }
         this.openedYet = true;
