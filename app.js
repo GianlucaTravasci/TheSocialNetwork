@@ -48,8 +48,11 @@ app.use('/', router);
 io.on('connection', (socket) => {
     if(socket.request.session.user) {
         let user = socket.request.session.user
+
+        socket.emit('welcome', {username: user.username, avatar: user.avatar})
+
         socket.on('chatMessageFromBrowser', (data) => {
-            io.emit('chatMessageFromServer', {message: data.message, username: user.username, avatar: user.avatar})
+            socket.emit('chatMessageFromServer', {message: data.message, username: user.username, avatar: user.avatar})
         })
     }
 })
