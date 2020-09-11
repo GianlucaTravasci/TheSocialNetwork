@@ -42,8 +42,10 @@ app.set('view engine', 'ejs');
 
 app.use('/', router);
 
-io.on('connection', () => {
-    console.log('CONNECTED!!')
+io.on('connection', (socket) => {
+    socket.on('chatMessageFromBrowser', (data) => {
+        io.emit('chatMessageFromServer', {message: data.message})
+    })
 })
 
 module.exports = server;
