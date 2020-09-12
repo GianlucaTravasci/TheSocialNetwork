@@ -51,6 +51,7 @@ export default class Chat {
                     </div>
                 </div>
             </div>`)
+        this.chatLog.scrollTop = this.chatLog.scrollHeight;
     }
 
     openConnection(){
@@ -74,6 +75,7 @@ export default class Chat {
                 </div>
                 <img class="chat-avatar avatar-tiny" src="${this.avatar}">
             </div>`)
+        this.chatLog.scrollTop = this.chatLog.scrollHeight;
         this.chatField.value = '';
         this.chatField.focus();
     }
