@@ -2,6 +2,7 @@ const express = require('express')
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
+const sanitizeHTML = require('sanitize-html')
 const app = express();
 
 
@@ -54,7 +55,7 @@ io.on('connection', function(socket) {
       socket.emit('welcome', {username: user.username, avatar: user.avatar})
   
       socket.on('chatMessageFromBrowser', function(data) {
-        socket.broadcast.emit('chatMessageFromServer', {message: data.message, username: user.username, avatar: user.avatar})
+        socket.broadcast.emit('chatMessageFromServer', {message: sanitizeHTML(data.message, {allowedTags: [], allowedAttributes: {}}), username: user.username, avatar: user.avatar})
       })
     }
   })
