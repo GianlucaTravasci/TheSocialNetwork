@@ -57,7 +57,7 @@ export default class Chat {
         this.socket = io();
         this.socket.on('welcome', (data) => {
             this.username = data.username;
-            this.avatar = data.username;
+            this.avatar = data.avatar;
         })
         this.socket.on('chatMessageFromServer', (data) => {
             this.displayMessageFromServer(data)

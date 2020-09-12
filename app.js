@@ -3,8 +3,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+
 
 let sessionOption = session({
     secret: "JS is cool",
@@ -14,9 +13,6 @@ let sessionOption = session({
     cookie: {maxAge: 1000 * 60 * 60 * 24, httpOnly: true} //here im setting a session that is actually stay up for an entire day
 });
 
-io.use((socket, next) => {
-    sessionOption(socket.request, socket.request.res, next)
-})
 app.use(flash())
 app.use(sessionOption);
 app.use((req, res, next)=>{
@@ -39,22 +35,28 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
-
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 
 app.use('/', router);
 
-io.on('connection', (socket) => {
-    if(socket.request.session.user) {
-        let user = socket.request.session.user
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
-        socket.emit('welcome', {username: user.username, avatar: user.avatar})
-
-        socket.on('chatMessageFromBrowser', (data) => {
-            socket.emit('chatMessageFromServer', {message: data.message, username: user.username, avatar: user.avatar})
-        })
-    }
+io.use((socket, next) => {
+    sessionOption(socket.request, socket.request.res, next)
 })
+
+io.on('connection', function(socket) {
+    if (socket.request.session.user) {
+      let user = socket.request.session.user
+  
+      socket.emit('welcome', {username: user.username, avatar: user.avatar})
+  
+      socket.on('chatMessageFromBrowser', function(data) {
+        socket.broadcast.emit('chatMessageFromServer', {message: data.message, username: user.username, avatar: user.avatar})
+      })
+    }
+  })
 
 module.exports = server;
