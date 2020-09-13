@@ -113,6 +113,7 @@ exports.profilePostsScreen = (req, res) => {
     Post.findByAuthorId(req.profileUser._id)
         .then((posts) => {
             res.render('profile', {
+                title: `${req.profileUser.username}`,
                 currentPage: 'posts',
                 posts: posts,
                 profileUsername: req.profileUser.username,
